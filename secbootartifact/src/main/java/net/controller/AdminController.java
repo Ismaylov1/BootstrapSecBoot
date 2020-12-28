@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import net.model.Role;
 import net.model.User;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.List;
@@ -24,9 +25,13 @@ public class AdminController {
     private RoleServiceImpl roleService;
 
     @GetMapping(value = "/admin")
-    public String allUsers(Model model) {
+    public String allUsers(Model model, Principal principal) {
         model.addAttribute("allUsers", userService.listUsers());
+        model.addAttribute("oneUser", userService.getUserByName(principal.getName()));
+        model.addAttribute("listRole", roleService.listRoles());
+        model.addAttribute("newUser", new User());
         List<User> users = userService.listUsers();
+        List<Role> roles = roleService.listRoles();
         return "admin";
     }
 
@@ -44,16 +49,16 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/admin/edit/{id}")
-    public String editUser(@PathVariable("id") long id, Model model) {
-        model.addAttribute("listRole", roleService.listRoles());
-        model.addAttribute("editUser", userService.getUserById(id));
-        return "editUsers";
-    }
+//    @GetMapping("/admin/edit/{id}")
+//    public String editUser(@PathVariable("id") long id, Model model) {
+//        model.addAttribute("listRole", roleService.listRoles());
+//        model.addAttribute("editUser", userService.getUserById(id));
+//        return "redirect:/admin";
+//    }
 
-    @PostMapping("/admin/edit/{id}")
-    public String updateUser(@ModelAttribute("editUser") User user,
-                             @RequestParam(value = "newRole", required = false) String[] role) {
+    @PostMapping("/admin/edit")
+    public String updateUser(@ModelAttribute("editUser")  @Valid User user,
+                             @RequestParam(value = "newRole") String[] role) {
         user.setRoles(addNewRole(role));
         userService.updateUsers(user);
         return "redirect:/admin";
