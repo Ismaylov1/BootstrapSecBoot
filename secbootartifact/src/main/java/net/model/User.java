@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users",
@@ -24,6 +25,16 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "age")
+    private Byte age;
+
+    public Byte getAge() {
+        return age;
+    }
+
+    public void setAge(Byte age) {
+        this.age = age;
+    }
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
@@ -33,6 +44,12 @@ public class User implements UserDetails {
 
     public User() {
 
+    }
+
+    public Set<String> getRoleFiltered() {
+        return roles.stream()
+                .map(Role::getName)
+                .collect(Collectors.toSet());
     }
 
     public Long getId() {

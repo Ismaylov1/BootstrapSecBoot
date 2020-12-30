@@ -35,15 +35,15 @@ public class AdminController {
         return "admin";
     }
 
-    @GetMapping("/admin/add")
-    public String getUserForm(Model model) {
-        model.addAttribute("listRole", roleService.listRoles());
-        return "userAdd";
-    }
+//    @GetMapping("/admin/add")
+//    public String getUserForm(Model model) {
+//        model.addAttribute("listRole", roleService.listRoles());
+//        return "userAdd";
+//    }
 
     @PostMapping("/admin/add")
     public String addUser(@ModelAttribute("addUser") User user,
-                          @RequestParam(value = "newRole", required = false) String[] role) {
+                          @RequestParam(value = "newRole") String[] role) {
         user.setRoles(addNewRole(role));
         userService.add(user);
         return "redirect:/admin";
