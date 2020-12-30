@@ -35,11 +35,6 @@ public class AdminController {
         return "admin";
     }
 
-//    @GetMapping("/admin/add")
-//    public String getUserForm(Model model) {
-//        model.addAttribute("listRole", roleService.listRoles());
-//        return "userAdd";
-//    }
 
     @PostMapping("/admin/add")
     public String addUser(@ModelAttribute("addUser") User user,
@@ -49,12 +44,7 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-//    @GetMapping("/admin/edit/{id}")
-//    public String editUser(@PathVariable("id") long id, Model model) {
-//        model.addAttribute("listRole", roleService.listRoles());
-//        model.addAttribute("editUser", userService.getUserById(id));
-//        return "redirect:/admin";
-//    }
+
 
     @PostMapping("/admin/edit")
     public String updateUser(@ModelAttribute("editUser")  @Valid User user,
